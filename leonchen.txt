@@ -5,3 +5,5 @@ git clone git@github.com:leonchen1225/gitskills.git
 
 在Dev上提交内容 禁止 快速合并
 
+开发新功能，此时遇到现场问题需要修复，先“stash 储藏”起来
+
