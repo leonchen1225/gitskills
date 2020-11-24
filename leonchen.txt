@@ -3,3 +3,5 @@ git clone git@github.com:leonchen1225/gitskills.git
 
 在Dev上提交内容
 
+在Dev上提交内容 禁止 快速合并
+
