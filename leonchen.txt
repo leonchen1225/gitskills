@@ -13,7 +13,5 @@ feature-log:新增日志功能
 
 sourcetree：dev 提交新功能222
 
-add table
-
 
 add 功能1在dev分支
