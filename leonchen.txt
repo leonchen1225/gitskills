@@ -8,5 +8,6 @@ add by new feature by leonchen1225
 由leonchen1225添加新功能
 开发新功能，此时遇到现场问题需要修复，先“stash 储藏”起来
 
+feature-log:新增日志功能
 
 
