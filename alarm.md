@@ -11,3 +11,5 @@ alarm feature - 4.
 alarm feature - 5.
 
 alarm feature - 6.
+
+alarm feature - 7.
