@@ -17,4 +17,4 @@ alarm feature - 7.
 
 alarm feature - 8.
 
-alarm feature - 9-1.
+alarm feature - 9-1&2.
