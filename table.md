@@ -10,3 +10,7 @@ table feature-3
 table feature-4
 
 table feature-5
+
+table feature-6
+
+table feature-7-1&2
