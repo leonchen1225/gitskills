@@ -15,5 +15,3 @@ def application(environ, start_response):
     f.close
 
     return [body]
-
-    
