@@ -1,0 +1,132 @@
+body, #page-wrapper {
+  background: #ffffff; /*F3F3F4;*/
+}
+
+.box {
+  width: 635px;
+  clear: both;
+  margin-bottom: 25px;
+  margin-top: 0;
+  padding: 0;
+}
+
+.box-title {
+	height: 22px;
+  background: #f7f7f7; /*c0e1ff */
+  color: #333333;  /*#676a6c */;
+	border-style: none none solid;
+	border-width: 3px;
+  border-color: #5baada; /*e7eaec */
+	border-radius: 5px 5px 0;
+	padding: 14px 15px 7px;
+	margin-bottom: 0;
+	position: relative;
+}
+
+.box-title h5 {
+  display: inline-block;
+  font-size: 16px;
+  margin: 0 0 7px;
+  padding: 0;
+  text-overflow: ellipsis;
+  float: none;
+}
+
+.box-tools {
+  display: block;
+  float: none;
+  margin-top: 0;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 0;
+  text-align: right;
+}
+
+.box-tools a {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #c4c4c4 !important;
+}
+
+.box-content {
+  background-color: #ffffff;
+  color: inherit;
+  padding: 15px 20px 20px 20px;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid;
+  border-width: 0px;
+}
+
+.box-footer {
+  color: inherit;
+  border-top: 0px solid #e7eaec;
+  font-size: 90%;
+  background: #ffffff;
+  padding: 10px 15px;
+	display: none;
+}
+
+.ic-tri-up {
+}
+.ic-tri-down {
+}
+.ic-tri-left {
+}
+.ic-tri-right {
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 64px;
+  height: 64px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.progress {
+  position: relative;
+  display: inline;
+  clear: both;
+  float: left;
+  width: 100px;
+  height: 20px;
+  border: 1px solid #ccc;
+  background:#f7f7f7;
+}
+
+.progress-bar {
+  position: absolute;
+  background: #8DC643;;
+}
+
+table a {
+  text-decoration: none;
+  color: #000;
+}
+
+#issue-table tr:first-child, #member-table tr:first-child {
+  font-weight: 300;
+	background: #d2e9ff; /*bfdfff*/;
+}
+
+#issue-table tr:last-child, #member-table tr:last-child {
+  font-weight: bold;
+  background: #fee;
+}
+
+#issue-table tr:nth-child(4n+8) {
+  background: #FFFFC2;
+}
+
+#issue-table tr:nth-child(1) td:nth-child(3), #issue-table tr:nth-child(4n+8) td:nth-child(2) {
+  font-weight: bold;
+}

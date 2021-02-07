@@ -1,166 +1,457 @@
-<html xmlns:ganttproject="http://ganttproject.sf.net/">
+<!doctype html>
+<html lang="en">
 <head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>GanttProject - index</title>
-<style>
-	    A:link {
-		FONT-WEIGHT: bold;  TEXT-DECORATION: none;
-		FONT-SIZE: 14px ; COLOR: black;
-	    }
-	    A:visited {
-		FONT-WEIGHT: bold;  TEXT-DECORATION: none;
-		FONT-SIZE: 14px ; COLOR: black; BACKGROUND: none
-	    }
-	    A:hover {
-		FONT-WEIGHT: bold;  TEXT-DECORATION: none;
-		FONT-SIZE: 14px ; COLOR: white ; BACKGROUND: #6d9ec6;
-	    }
-	    .notes {
-	      padding-left: 10px;
-	    }
-	    .notes pre {
-	      font-family: Arial, Helvetica;
-	      font-size: 10px;
-	      margin-top: 0px;
-	      padding-top: 0px;
-	      margin-bottom: 5px;
-	    }
-	    .attachment {
-	      padding-left: 10px;
-	    }
-	    .attachment a:link {
-	      font-weight: normal;
-	      font-size: 12px;
-	      color: #6d9ec6;
-	      background: white;
-	    }
-	    .attachment a:hover {
-	      font-weight: normal;
-	      text-decoration: underline;
-	      font-size: 12px;
-	      color: #6d9ec6;
-	      background: white;
-	    }
-	    .attachment a:visited {
-	      font-weight: normal;
-	      font-size: 12px;
-	      background: white;
-	      color: gray;
-	    }
-	    TD {
-		FONT-SIZE: 12px; COLOR: black; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, Geneva, sans-serif
-	    }
-	    UL {
-		FONT-SIZE: 12px; FONT-FAMILY: Arial, Helvetica, Geneva, sans-serif
-	    }
-	    LI {
-		FONT-SIZE: 12px; FONT-FAMILY: Arial, Helvetica, Geneva, sans-serif
-	    }
-	    H1 {
-		FONT-WEIGHT: bold; FONT-SIZE: 16pt; COLOR: #6d9ec6;
-	    }
-	    H2 {
-		FONT-WEIGHT: bold; FONT-SIZE: 16pt; COLOR: #000000;
-	    }
-	    H3 {
-		FONT-WEIGHT: bold; FONT-SIZE: 13pt; COLOR: #6d9ec6;
-	    }
-	    H4 {
-		FONT-WEIGHT: bold; FONT-SIZE: 13px; COLOR: #000000;
-	    }
-	    H5 {
-		FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #6d9ec6;
-	    }
-	    H6 {
-		FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #000000
-	    }
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>HolliView问题统计分析</title>
+  <link href="css/style.min.css" rel="stylesheet">
+  <style type="text/css">
 
-	    </style>
+  </style>
+  <script src="lib/Chart.min.js"></script>
+  <script type="text/javascript">
+
+  async function Ajax(url = '', data = {}, type = 'GET', method = 'fetch') {
+  // handle form-datas
+  type = type.toUpperCase()
+  let sendData
+
+  if (type == 'GET') {
+    let _data = []
+    Object.keys(data).forEach(key => {
+      _data.push(key + '=' + data[key])
+    })
+    url = url + '?' + _data.join('&')
+  } else {
+    sendData = JSON.stringify(data)
+  }
+
+  // build an object for ajax request
+  if (window.fetch && method == 'fetch') {
+    let reqConfig = {
+      //credentials: 'include',
+      method: type,
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      mode: 'cors',
+      cache: 'force-cache'
+    }
+
+    try {
+      const response = await fetch(url, reqConfig)
+      const responseJson = await response.json()
+
+      return responseJson
+    } catch(error) {
+      throw new Error(error)
+    }
+  } else {
+    return new Promise((resolve, reject) => {
+      let reqObj
+
+      if (window.XMLHttpRequest) {
+        reqObj = new XMLHttpRequest()
+      } else {
+        reqObj = new ActiveXObject('Microsoft.XMLHTTP')
+      }
+
+      reqObj.open(type, url, true)
+      reqObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+      reqObj.send(sendData)
+
+      reqObj.onreadystatechang_HTe = () => {
+        if (reqObj.readyState == 4) {
+          if (reqObj.status == 200) {
+            let res = reqObj.response
+            if (typeof res !== 'object') {
+              res = JSON.parse(res)
+            }
+            resolve(res)
+          } else {
+            reject(reqObj)
+          }
+        }
+      }
+    })
+  }
+
+}
+
+
+const hv = {
+    server: {
+        host: '172.21.55.10',
+        ptoken: 'pkKATFzDPHr8TRRAuw19'
+    },
+    issue: {
+        group_id: 52,
+        goal: 0.99,
+        goal_precision: 0,
+        unitbug_goal: 0.15,
+        prod_di_goal: 8,
+        filters: 'created_after=2020-04-04T08:00:00.000+08:00',
+        hang_filter: 'created_after=',
+        homepage: this.server
+    },
+    stat: {
+        lineof_computed: 139.3155,   // KL   FORMULA: added + modified + (baseline - modified) * 0.1
+        lineof_baseline: 0,          // KL
+        lineof_added: 91.617,        // KL
+        lineof_modified: 27.635,     // KL
+        lineof_extra: 0,             // KL
+        reuse_ratio: 0.1,
+        lastver_issue: 1,
+        currver_left_issue: 2,
+    },
+    projects: [
+        {'id':52,'name':'HolliView', 'type':'group', 'alias':'HOLLIVIEW'}, {'id':20,'name':'HolliViewTool', 'type':'project', 'alias':'可视化工具'}, 
+        {'id':49,'name':'HolliViewDev', 'type':'project', 'alias':'开发自测库'}, {'id':22,'name':'HolliViewAndroid', 'type':'project', 'alias':'安卓客户端'}
+        //,{'id':21,'name':'HolliViewServer', 'type':'project', 'alias':'后端服务'}, {'id':23,'name':'HolliView-iOS', 'type':'project', 'alias':'iOS客户端'}
+    ],
+    members: [
+        {'id':'zhangyifei','name':'张一飞'}, {'id':'xuxiumei','name':'徐秀眉'}, /*{'id':'zuojiayi','name':'左佳怡'},*/ {'id':'liyunqian','name':'李云倩'}, 
+        {'id':'mengjintao','name':'孟金涛'}, {'id':'wanglimin','name':'王利民'}, {'id':'liuxin','name':'刘昕'}, {'id':'xuweixing', 'name':'许维星'}, 
+        {'id':'tianzhongbao','name':'田忠宝'}, {'id':'heweidong','name':'何卫东'}, {'id':'caojie','name':'曹杰'}, {'id':'yangjianping','name':'杨建平'}
+    ],
+    states: {
+        eval: '待评估', hang: '挂起', solving: '待修改', 
+        solved: '已修改', testing: '待测试', passed: '测试通过',
+        notfix: '不是问题', duplicated: '重复问题', unsupported: '不支持'
+    },
+    lang: {
+        // Statistics
+        item: '项目',
+        group_undone: '未解决',
+        group_done: '已解决',
+        stat_undone: '小计',
+        stat_done: '小计',
+        stat_total: '总计',
+        sub_total: '合计',
+
+        // Labels
+        opend:'未关闭'
+    }
+}
+
+
+const stats_labels = Object.values(hv.states), stats_keys = Object.keys(hv.states), 
+      stats_opend_keys = stats_keys.splice(-3), stats_prog_keys = stats_keys.slice(1, 4),
+      stats_todo_keys = stats_keys.splice(0, 3);
+const api_base = `http://${hv.server.host}/api/v4`, api_uri = `/issues_statistics?private_token=${hv.server.ptoken}`;
+
+hv.projects.forEach(item => {
+  item.undone = item.unsupported = item.duplicated = item.notfix = item.hang = item.solving = item.eval = 0;
+  item.done = item.passed = item.testing = item.solved = 0;
+  item.total = 0;
+
+  for(const el in hv.states) {
+      const condition = stats_todo_keys.indexOf(el) < 0 ? hv.issue.filters : hv.issue.hang_filter;
+      const req_url = `${api_base}/${item.type}s/${item.id}${api_uri}&${condition}&labels=BUG,${hv.states[el]}`;
+
+      fetch( req_url, {method: 'get'})
+      .then(function(response) {
+          if (!response.ok) throw new Error(response.statusText)
+          return response.json();
+      }).then(function(j) {
+          item[el] = stats_opend_keys.indexOf(el) < 0 ? j.statistics.counts.all : j.statistics.counts.opened;
+      }).catch(function(err) {
+          // Error :(
+      });
+  }
+});
+
+
+hv.members.forEach(item => {
+  item.hang = item.total = item.solving = item.solved = 0;
+     
+  for(const el of stats_prog_keys) {
+        const req_url = `${api_base}${api_uri}&scope=all&labels=BUG,${hv.states[el]}&assignee_username=${item.id}`;
+       
+        fetch( req_url, {method: 'get', async: true})
+      .then(function(response) {
+          if (!response.ok) throw new Error(response.statusText)
+          return response.json();
+      }).then(function(j) {
+          item[el] = j.statistics.counts.opened;
+      }).catch(function(err) {
+            // Error :(
+      });
+  }
+});
+
+
+setTimeout(function () {
+    /* 
+      1.ISSUE ANALYSIS 
+    */
+
+    // Step1. Tramat Matrix
+    const proj_keys = Object.keys(hv.projects[0]);
+    const issue_baseurl = 'http://' + hv.server.host + '/dashboard/issues';
+    proj_keys.splice(0, 3);
+    let projects_arr = new Array();
+    for(let i = 0; i < proj_keys.length; i++) {
+      projects_arr[i] = [proj_keys[i]];
+    }
+
+    hv.projects.forEach((item, index) => {
+      const values = Object.values(item).splice(4);
+      item.undone = values.slice(0, 6).reduce((total, num) => total += num);
+      item.done = values.slice(6).reduce((total, num) => total += num);
+      item.total = values.reduce((total, num) => total += num);
+      for(const i in proj_keys) {
+        projects_arr[i][index + 1] = item[proj_keys[i]];
+      }
+    });
+
+    //console.log(projects_arr);
+
+    // Step2. Print Issue Table
+    let todo_body =["<table id='issue-table' border='1' cellspacing='0' cellpadding='5' style='border-collapse:collapse'>", ''].join('');
+    let todo_head = projects_arr[0];
+    projects_arr.forEach((item, key) => {
+        todo_body += `<tr align="center">`;
+        for(const i in item) {
+            const status = stats_opend_keys.indexOf(item[i]) < 0 ? hv.states[item[i]] || hv.lang['stat_'+item[i]] : hv.states[item[i]] + hv.lang['opend'];
+            todo_body += `<td${ i == 0 ? " align='left'" : ''}><a target='_blank' href='${issue_baseurl}?label_name[]=BUG&label_name[]=${hv.states[item[0]]}'>${ i == 0 ? status || '状态' : item[i]}</a></td>`;
+        }
+        todo_body += `</tr>`;
+    });
+    document.getElementById('totolist').innerHTML = todo_body + '</table>';
+
+    // Step3. Insert Column and Merge Cells
+    let it = document.getElementById('issue-table'), row0 = it.rows[0], row1 = it.rows[1], row8 = it.rows[8], rowz = it.rows[it.rows.length -1];
+    it.rows[0].cells.length;
+    let thead = document.createElement("td");
+    thead.innerHTML = hv.lang.item;
+    thead.width = 80;
+    row0.insertBefore(thead, row0.cells[0]);
+
+    let td_undone = document.createElement("td");
+    td_undone.innerHTML = hv.lang.group_undone;
+    td_undone.setAttribute("rowspan", 7);
+    row1.insertBefore(td_undone, row1.cells[0]);
+
+    let td_done = document.createElement("td");
+    td_done.innerHTML = hv.lang.group_done;
+    td_done.setAttribute("rowspan", 4);
+    row8.insertBefore(td_done, row8.cells[0]);
+
+    rowz.cells[0].setAttribute("colspan", 2);
+
+
+    /** 
+      2. MILESTONE PLAN 
+    */
+    const group = hv.projects[0], total = group.total || 0, done = group.done || 0, undone = group.undone || 0;
+    const repair_rate = (done / total * 100).toFixed(hv.issue.goal_precision || 0);
+    const left_bug = Math.ceil(total * hv.issue.goal - done);
+    const unitbug_rate = (hv.projects[2].total / total * 100).toFixed(2);
+	const unitbug_left = hv.projects[2].total + "/" + (total * hv.issue.unitbug_goal).toFixed();
+    
+    document.getElementById('goal').innerText = hv.issue.goal * 100;
+	document.getElementById('unitbug-goal').innerText = hv.issue.unitbug_goal * 100;
+	document.getElementById('prod-di-goal').innerText = hv.issue.prod_di_goal;
+
+    document.getElementById('repair-rate').innerText = repair_rate;
+    document.getElementById('left-bug').innerText = left_bug;
+    document.getElementById('unitbug-rate').innerText = unitbug_rate;
+    document.getElementById('unitbug-left').innerText = unitbug_left;
+
+    document.getElementById('issue-dst-curr').innerText = (hv.projects[1].total / (hv.stat.lineof_added + hv.stat.lineof_modified)).toFixed(4);
+    document.getElementById('issue-remain-rate').innerText = ((hv.stat.currver_left_issue + hv.stat.lastver_issue) / hv.stat.lineof_computed).toFixed(4);
+    document.getElementById('prod-di-curr').innerText = group.undone;
+
+    /* 
+      3. MEMBER PROGRESS 
+    */
+    let team = {"solving": 0, "solved": 0};
+    let tbody =["<table id='member-table' border='1' cellspacing='0' cellpadding='5' style='border-collapse:collapse'>", 
+            '<tr align="center"><td width="80">姓名</td><td width="50">总数</td><td>待修改</td><td>已修改</td><td>进度</td></tr>'].join('');
+    hv.members.forEach(item => {
+        let solving = item.solving, solved = item.solved;
+        item.total = solving + solved;
+        item.progress = (solved == item.total) ? 100 : solved/(item.total || 0.001) * 100;
+
+        team.solving += solving;
+        team.solved += solved;
+
+        tbody += ['<tr align="center">', `<td>${item.name}</td>`, 
+                `<td><a target="_blank" href="${issue_baseurl}?assignee_username=${item.id}&label_name[]=BUG">${item.total}</a></td>`,
+                `<td><a target="_blank" href="${issue_baseurl}?assignee_username=${item.id}&label_name[]=BUG&label_name[]=${hv.states.solving}">${item.solving}</a></td>`,
+                `<td><a target="_blank" href="${issue_baseurl}?assignee_username=${item.id}&label_name[]=BUG&label_name[]=${hv.states.solved}">${item.solved}</a></td>`,
+                `<td><div class="progress"><div class="progress-bar" style='width:${item.progress}px;'> &nbsp; </div></td>`,
+            '</tr>'].join('');
+    });
+
+    team.total = team.solving + team.solved;
+    team.progress = (team.solving == team.solved) ? 100 : team.solved / team.total * 100;
+    tbody += `<tr align="center"><td>${hv.lang.sub_total}</td><td>${team.total}</td><td>${team.solving}</td><td>${team.solved}</td><td><div class="progress" style="border-color:#f96;"><div class="progress-bar" style='width:${team.progress}px;background:orange;'> &nbsp; </div></td></tr>`;
+    document.getElementById('progress').innerHTML = tbody + '</table>';
+
+    document.getElementById("prod-title").addEventListener("click", function() {
+        var prod_detail = document.getElementById("prod-detail"),
+            is_hidden = prod_detail.style.display === 'none';
+        prod_detail.style.display = is_hidden ? 'block' : 'none';
+    });
+
+
+
+   
+    var d1 = [[1262304000000, 6], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
+    var d2 = [[1262304000000, 5], [1264982400000, 200], [1267401600000, 1605], [1270080000000, 6129], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 30062], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
+    var data1 = [{
+        label: "有效问题",
+        data: d1,
+        color: "#17a084"
+    }, {
+        label: "修复问题",
+        data: d2,
+        color: "#127e68"
+    }];
+
+    var lineData = {
+        labels: ["V1.2.0.0", "V1.2.0.1", "V1.2.0.2", "V1.2.0.3", "V1.2.0.4", "V1.2.0.5", "V1.2.0.6"],
+        datasets: [{
+            label: "有效问题",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [68, 35, 97, 47, 32, 74, 30]
+        }, {
+            label: "修复问题",
+            fillColor: "rgba(26,179,148,0.5)",
+            strokeColor: "rgba(26,179,148,0.7)",
+            pointColor: "rgba(26,179,148,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(26,179,148,1)",
+            data: [48, 48, 60, 39, 56, 37, 2]
+        }]
+    };
+    var lineOptions = {
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        bezierCurve: true,
+        bezierCurveTension: 0.4,
+        pointDot: true,
+        pointDotRadius: 4,
+        pointDotStrokeWidth: 1,
+        pointHitDetectionRadius: 20,
+        datasetStroke: true,
+        datasetStrokeWidth: 2,
+        datasetFill: true,
+        responsive: true,
+        legend: {
+            position: 'top'
+        },
+        title: {
+            display: true
+        }
+    };
+    var chart = document.getElementById("lineChart"),
+        ctx = chart.getContext("2d");
+    var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+    chart.previousSibling.previousSibling.remove();
+   
+
+
+
+}, 800);
+
+
+
+ </script>
+ 
 </head>
-<body bgcolor="white">
-<center>
-<style>
-div.project_name {
-  font-size: 150%;
-  color: black;
-  font-weight: bold;
-  border-top: solid #6d9ec6 5px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 5px;
-}
-div.page_links {
-  background: #6d9ec6;
-  text-align: center;
-}
-</style>
-<center>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td bgcolor="#dddddd">
-<div class="project_name"><a href="index.html">可视化组态工具新产品开发项目计划_WBS计划</a></div>
-</td>
-</tr>
-<tr>
-<td>
-<div class="page_links">
-<a href="index.html"></a>  |
-          <a href="index-chart.html">Gantt 图</a> |
-          <a href="index-tasks.html">任务</a> |
-          <a href="index-resources.html">资源</a>
+<body>
+<div id="page-wrapper">
+
+<div class="box">
+  <div class="box-title">
+    <h5>问题质量目标</h5>
+    <div class="box-tools">
+      <a class="collapse-link"><i class="ic-tri-up"></i></a>
+    </div>
+  </div>
+  <div class="box-content">
+    <!-- Start -->
+    <h3><p style="color:#FF0000"><label>本周解决率目标：</label><label id="goal">-</label> %</p></h3>
+    <h3><p style="color:#FF0000"><label>当前解决率达成：</label><label id="repair-rate">-</label> %</p></h3>
+    <h3><p style="color:#FF0000"><label>当前距目标个数：</label><label id="left-bug">-</label></p></h3>
+    <div>
+      <h3 id="prod-title">
+        <p><font color="#8DC643">开发自测问题占比：<label id="unitbug-rate">-</label>%</font>  &nbsp;(目标 ≥ <span id="unitbug-goal">-</span>%) &nbsp; <label id="unitbug-left"></label></p>
+      </h3>
+      <div id="prod-detail" style="display:none;">
+        <h3><p><font color="#8DC643">全功能平均解决率：<label id="issue-avg-curr">90.60%</label></font> &nbsp;(目标 ≥ <span id="issue-avg-solved">90%</span>)</p></h3>
+        <h3>
+          <p title="'    系统测试发现有效问题数&#10;—————————————&#10; 新增代码行数 + 修改代码行数">
+            <span><label style="color:#8DC643">产品测试缺陷密度：</label><label id="issue-dst-curr" style="color:#FF3300">-</label></span> &nbsp;
+            <span>(目标 ≤ <label id="issue-dst-goal">4/KL</label>)
+          </p>
+        </h3>
+        <h3>
+          <p title="'         本次发布版本遗留缺陷数 + 最后一次全功能有效缺陷数&#10;————————————————————————————&#10; 新增代码行数 + 修改代码行数 + 重用代码行数 * 重用代码换算系数">
+            <span><label style="color:#8DC643"> &nbsp; &nbsp;软件问题残留率：</label><label id="issue-remain-rate" style="color:#FF3300">-</label></span> &nbsp; 
+            <span>(目标 ≤ <label id="issue-remain-goal">0.1/KL</label>)<label style="color:#999999;font-size:12px;"> 非安全产品</label></span>
+          </p>
+        </h3>
+        <h3><p><font color="#8DC643">产品遗留问题DI值：<label id="prod-di-curr" style="color:#FF3300">-</label></font> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; (目标 ≤ <span id="prod-di-goal">-</span>)</p></h3>
+      </div>
+    </div>
+    <!-- End -->
+  </div>
+  <div class="box-footer"></div>
 </div>
-</td>
-</tr>
-</table>
-</center>
-<br>
-<table width="550" border="0">
-<tr>
-<td valign="top" bgcolor="#dddddd">
-<h5>项目</h5>
-</td><td valign="top">
-<h6>可视化组态工具新产品开发项目计划_WBS计划</h6>
-</td>
-</tr>
-<tr>
-<td valign="top" bgcolor="#dddddd">
-<h5>组织</h5>
-</td><td valign="top">
-<h6>和利时</h6>
-</td>
-</tr>
-<tr>
-<td valign="top" bgcolor="#dddddd">
-<h5>网页连接</h5>
-</td><td valign="top"><a href="http://www.hollysys.com">
-<h6>http://www.hollysys.com</h6>
-</a></td>
-</tr>
-<tr>
-<td valign="top" bgcolor="#dddddd">
-<h5>描述</h5>
-</td><td valign="top">
-<div style="padding-left:10pt">
-<pre style="font-family: sans-serif">2020年可视化组态工具新产品开发项目研发范围主要包括HolliView产品2D功能迭代完善及3D功能研发：
-1. 标准化框架引入、模块化
-2. 本地侧版本增加加密狗授权
-3. 基本图元新增多段变色、闪烁、流动速度及数量实时控制
-4. 基本组件报警、趋势升级，新增日志组件
-5. 二次开发新增脚本编辑器、脚本触发器、事件及函数
-6. 3D支持数据展示、动态效果、动画
-7. 手机APP支持可视化组态，支持IOS</pre>
+
+<div class="box">
+  <div class="box-title">
+    <h5>问题趋势分析</h5>
+    <div class="box-tools"></div>
+  </div>
+  <div class="box-content">
+    <div id="issue-trend">
+      <div class="loader"></div>
+      <canvas id="lineChart" height="114"></canvas>
+    </div>
+  </div>
+  <div class="box-footer"></div>
 </div>
-</td>
-</tr>
-</table>
-</center>
-<br>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-<td bgcolor="#6d9ec6" width="50%"><font color="#FFFFFF"><b>Ganttproject (2.8.11 Pilsen (build 2396))</b></font></td><td bgcolor="#6d9ec6" width="50%" align="right"><b><a href="http://ganttproject.biz">ganttproject.biz</a></b>
-<br>
-<b>20-12-23 - 8:52:06</b></td>
-</tr>
-</table>
+
+<div class="box">
+  <div class="box-title">
+    <h5>问题统计分析</h5>
+    <div class="box-tools"></div>
+  </div>
+  <div class="box-content">
+    <div id="totolist">
+      <div class="loader"></div>
+    </div>
+  </div>
+  <div class="box-footer"></div>
+</div>
+
+<div class="box">
+  <div class="box-title">
+    <h5>问题修改进度</h5>
+    <div class="box-tools"></div>
+  </div>
+  <div class="box-content">
+    <div id="progress">
+      <div class="loader"></div>
+    </div>
+  </div>
+  <div class="box-footer"></div>
+</div>
+ 
+</div>
 </body>
 </html>
